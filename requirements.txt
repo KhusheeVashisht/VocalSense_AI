@@ -1,0 +1,24 @@
+# VocalSense AI: Personalised Voice Cloning and Speech Synthesis
+# Core Deep Learning Framework
+torch>=2.2.0
+torchaudio>=2.2.0
+
+# Pretrained Speech Models & Embeddings
+transformers>=4.40.0,<4.58.0
+huggingface-hub>=0.34.0,<1.0
+speechbrain>=1.0.0
+sentencepiece>=0.2.0
+
+# Audio Processing & Acoustic Analysis
+soundfile>=0.12.1
+librosa>=0.10.0
+numpy>=1.26.0,<3.0.0
+scipy>=1.12.0
+matplotlib>=3.8.0
+
+# Web Interface & Compatibility
+gradio>=6.0.0
+brotlicffi>=1.1.0.0
+
+# Testing & Quality Assurance
+pytest>=8.0.0
