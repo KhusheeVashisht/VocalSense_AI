@@ -189,6 +189,29 @@ class VoiceCloningEngine:
             audio_duration = len(audio_array) / TARGET_SAMPLE_RATE
             real_time_factor = total_time / max(audio_duration, 0.01)
 
+            # Persist successful synthesis event into SQLite database
+            try:
+                from src.database import save_recording
+                save_recording(
+                    operation_type="voice_cloning",
+                    file_name=os.path.basename(output_wav_path),
+                    duration_seconds=audio_duration,
+                    sample_rate=TARGET_SAMPLE_RATE,
+                    processing_duration_ms=total_time * 1000.0,
+                    processing_status="success",
+                    transcript=processed_text,
+                    word_count=text_meta.get("word_count"),
+                    character_count=text_meta.get("normalized_character_count"),
+                    language_code=language,
+                    stage_durations={
+                        "embedding_extraction_ms": round(emb_time * 1000.0, 1),
+                        "synthesis_ms": round(syn_time * 1000.0, 1),
+                    },
+                    estimated_wpm=round((text_meta.get("word_count", 0) / (audio_duration / 60.0)), 1) if audio_duration > 0 else None,
+                )
+            except Exception as db_err:
+                print(f"[VocalSense AI Database Warning] Failed to log synthesis: {db_err}")
+
             metadata = {
                 "input_text": processed_text,
                 "raw_text": text,
